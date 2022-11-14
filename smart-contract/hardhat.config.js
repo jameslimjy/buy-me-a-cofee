@@ -12,5 +12,8 @@ module.exports = {
       url: GOERLI_URL,
       accounts: [PRIVATE_KEY],
     },
+    hardhat: {
+      chainId: 31337,
+    },
   },
 };
