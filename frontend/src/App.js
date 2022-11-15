@@ -95,6 +95,40 @@ function App() {
     }
   };
 
+  const buyLargeCofee = async () => {
+    try {
+      const { ethereum } = window;
+
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum, "any");
+        const signer = provider.getSigner();
+        const buyMeACoffee = new ethers.Contract(
+          contractAddress,
+          contractABI,
+          signer
+        );
+
+        console.log("buying coffee..");
+        const coffeeTxn = await buyMeACoffee.buyCoffee(
+          name ? name : "anon",
+          message ? message : "Enjoy your LARGE coffee!",
+          { value: ethers.utils.parseEther("0.01") }
+        );
+
+        await coffeeTxn.wait();
+
+        console.log("mined ", coffeeTxn.hash);
+        console.log("LARGE coffee purchased!");
+
+        // Clear the form fields.
+        setName("");
+        setMessage("");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   // Function to fetch all memos stored on-chain.
   const getMemos = async () => {
     try {
@@ -153,8 +187,7 @@ function App() {
     getMemos();
     getOwnerInfo();
 
-    // Create an event handler function for when someone sends
-    // us a new memo.
+    // Create an event handler function for when someone sends us a new memo.
     const onNewMemo = (from, timestamp, name, message) => {
       console.log("Memo received: ", from, timestamp, name, message);
       setMemos((prevState) => [
@@ -188,21 +221,17 @@ function App() {
 
   return (
     <div className={styles.container}>
-      <h1>
-        <title>Buy {ownerName} A Coffee!</title>
-        <meta name="description" content="Tipping site" />
-        <link rel="icon" href="/favicon.ico" />
-      </h1>
-
       <main className={styles.main}>
-        <div>
+        <div className={styles.imageborder}>
           <img src="lazy-cats-cafe.jpeg" width="700"></img>
         </div>
+        <br />
+        <br />
         <h1 className={styles.title}>Buy {ownerName} a Coffee!</h1>
         <h3>you'll be donating to {ownerAddr}</h3>
 
         {currentAccount ? (
-          <div>
+          <div className={styles.form}>
             <form>
               <div class="formgroup">
                 <label>Name</label>
@@ -229,18 +258,34 @@ function App() {
                 ></textarea>
               </div>
               <div>
-                <button type="button" onClick={buyCoffee}>
+                <button
+                  className={styles.swagbutton}
+                  type="button"
+                  onClick={buyCoffee}
+                >
                   Send 1 Coffee for 0.001ETH
+                </button>
+              </div>
+              <div>
+                <button
+                  className={styles.swagbutton}
+                  type="button"
+                  onClick={buyLargeCofee}
+                >
+                  Send 1 LARGE Coffee for 0.01ETH
                 </button>
               </div>
             </form>
           </div>
         ) : (
-          <button onClick={connectWallet}> Connect your wallet </button>
+          <button className={styles.swagbutton} onClick={connectWallet}>
+            {" "}
+            Connect your wallet{" "}
+          </button>
         )}
       </main>
 
-      {currentAccount && <h1>Memos received</h1>}
+      {currentAccount && <h1 className={styles.title}>Memos received</h1>}
 
       {currentAccount &&
         memos.map((memo, idx) => {
