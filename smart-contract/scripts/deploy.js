@@ -10,7 +10,7 @@ async function main() {
 
   // We get the contract to deploy.
   const BuyMeACoffee = await hre.ethers.getContractFactory("BuyMeACoffee");
-  const buyMeACoffee = await BuyMeACoffee.deploy();
+  const buyMeACoffee = await BuyMeACoffee.deploy("James");
 
   await buyMeACoffee.deployed();
 
