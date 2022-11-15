@@ -188,8 +188,15 @@ function App() {
     getOwnerInfo();
 
     // Create an event handler function for when someone sends us a new memo.
-    const onNewMemo = (from, timestamp, name, message) => {
-      console.log("Memo received: ", from, timestamp, name, message);
+    const onNewMemo = (from, timestamp, name, message, isLargeCoffee) => {
+      console.log(
+        "Memo received: ",
+        from,
+        timestamp,
+        name,
+        message,
+        isLargeCoffee
+      );
       setMemos((prevState) => [
         ...prevState,
         {
@@ -197,6 +204,7 @@ function App() {
           timestamp: new Date(timestamp * 1000),
           message,
           name,
+          isLargeCoffee,
         },
       ]);
     };
@@ -299,7 +307,9 @@ function App() {
                 margin: "5px",
               }}
             >
-              <p style={{ "font-weight": "bold" }}>"{memo.message}"</p>
+              <p style={{ "font-weight": "bold" }}>
+                "{memo.message} {memo.isLargeCoffee}"
+              </p>
               <p>
                 From: {memo.name} at {memo.timestamp.toString()}
               </p>
