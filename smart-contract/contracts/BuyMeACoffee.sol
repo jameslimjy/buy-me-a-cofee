@@ -20,10 +20,12 @@ contract BuyMeACoffee {
     Memo[] memos;
 
     // address of contract deployer
-    address payable owner;
+    address payable public owner;
+    string public name;
 
-    constructor() {
+    constructor(string memory _name) {
         owner = payable(msg.sender);
+        name = _name;
     }
 
     /**

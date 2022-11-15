@@ -13,6 +13,8 @@ function App() {
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [memos, setMemos] = useState([]);
+  const [ownerName, setOwnerName] = useState("");
+  const [ownerAddr, setOwnerAddr] = useState("");
 
   const onNameChange = (event) => {
     setName(event.target.value);
@@ -118,10 +120,38 @@ function App() {
     }
   };
 
+  // Function to fetch name and address of owner.
+  const getOwnerInfo = async () => {
+    try {
+      const { ethereum } = window;
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const buyMeACoffee = new ethers.Contract(
+          contractAddress,
+          contractABI,
+          signer
+        );
+        console.log("contract object retrieved, fetching owner details now...");
+        let ownerAddr = await buyMeACoffee.owner();
+        let ownerName = await buyMeACoffee.name();
+        console.log("ownerAddr:", ownerAddr);
+        console.log("ownerName:", ownerName);
+        setOwnerName(ownerName);
+        setOwnerAddr(ownerAddr);
+      } else {
+        console.log("Metamask is not connected");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     let buyMeACoffee;
     isWalletConnected();
     getMemos();
+    getOwnerInfo();
 
     // Create an event handler function for when someone sends
     // us a new memo.
@@ -159,16 +189,17 @@ function App() {
   return (
     <div className={styles.container}>
       <h1>
-        <title>Buy Me A Coffee!</title>
+        <title>Buy {ownerName} A Coffee!</title>
         <meta name="description" content="Tipping site" />
         <link rel="icon" href="/favicon.ico" />
       </h1>
 
       <main className={styles.main}>
         <div>
-          <img src="cafe-35.jpeg" width="700"></img>
+          <img src="lazy-cats-cafe.jpeg" width="700"></img>
         </div>
-        <h1 className={styles.title}>Buy Me a Coffee!</h1>
+        <h1 className={styles.title}>Buy {ownerName} a Coffee!</h1>
+        <h3>you'll be donating to {ownerAddr}</h3>
 
         {currentAccount ? (
           <div>
