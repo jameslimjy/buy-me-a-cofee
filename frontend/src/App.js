@@ -297,24 +297,45 @@ function App() {
 
       {currentAccount &&
         memos.map((memo, idx) => {
-          return (
-            <div
-              key={idx}
-              style={{
-                border: "2px solid",
-                "border-radius": "5px",
-                padding: "5px",
-                margin: "5px",
-              }}
-            >
-              <p style={{ "font-weight": "bold" }}>
-                "{memo.message} {memo.isLargeCoffee}"
-              </p>
-              <p>
-                From: {memo.name} at {memo.timestamp.toString()}
-              </p>
-            </div>
-          );
+          if (memo.isLargeCoffee) {
+            return (
+              <div
+                key={idx}
+                style={{
+                  border: "2px solid",
+                  width: "600px",
+                  height: "80px",
+                  padding: "5px",
+                  margin: "5px",
+                }}
+              >
+                <p style={{ "font-weight": "bold" }}>"{memo.message}"</p>
+                <p>
+                  From: {memo.name} at {memo.timestamp.toString()}
+                </p>
+              </div>
+            );
+          } else {
+            return (
+              <div
+                key={idx}
+                style={{
+                  border: "4px solid",
+                  width: "600px",
+                  height: "120px",
+                  padding: "5px",
+                  margin: "5px",
+                  color: "red",
+                }}
+              >
+                <p style={{ "font-weight": "bold" }}>"{memo.message}"</p>
+                <p>
+                  From: {memo.name} at {memo.timestamp.toString()}
+                </p>
+                <p style={{ "font-size": "1" }}>Large Coffee!!</p>
+              </div>
+            );
+          }
         })}
     </div>
   );

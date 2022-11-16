@@ -65,7 +65,7 @@ body {
   touch-action: manipulation;
   white-space: nowrap;
   will-change: box-shadow,transform;
-  font-size: 18px;
+  font-size: 14px;
 }
 
 .swagbutton:focus {
